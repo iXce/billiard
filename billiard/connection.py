@@ -789,10 +789,11 @@ FAILURE = b'#FAILURE#'
 
 def deliver_challenge(connection, authkey):
     import hmac
+    import hashlib
     assert isinstance(authkey, bytes)
     message = os.urandom(MESSAGE_LENGTH)
     connection.send_bytes(CHALLENGE + message)
-    digest = hmac.new(authkey, message, 'md5').digest()
+    digest = hmac.new(authkey, message, hashlib.md5).digest()
     response = connection.recv_bytes(256)        # reject large message
     if response == digest:
         connection.send_bytes(WELCOME)
@@ -803,11 +804,12 @@ def deliver_challenge(connection, authkey):
 
 def answer_challenge(connection, authkey):
     import hmac
+    import hashlib
     assert isinstance(authkey, bytes)
     message = connection.recv_bytes(256)         # reject large message
     assert message[:len(CHALLENGE)] == CHALLENGE, 'message = %r' % message
     message = message[len(CHALLENGE):]
-    digest = hmac.new(authkey, message, 'md5').digest()
+    digest = hmac.new(authkey, message, hashlib.md5).digest()
     connection.send_bytes(digest)
     response = connection.recv_bytes(256)        # reject large message
     if response != WELCOME:
