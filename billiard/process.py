@@ -99,6 +99,7 @@ class BaseProcess(object):
             name or type(self).__name__ + '-' +
             ':'.join(str(i) for i in self._identity)
         )
+        self._tempdir = self._config.get('tempdir')
         if daemon is not None:
             self.daemon = daemon
         if _dangling is not None:
@@ -247,11 +248,6 @@ class BaseProcess(object):
     def _daemonic(self):
         # compat for 2.7
         return self.daemon
-
-    @property
-    def _tempdir(self):
-        # compat for 2.7
-        return self._config.get('tempdir')
 
     def __repr__(self):
         if self is _current_process:
