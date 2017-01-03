@@ -113,6 +113,19 @@ else:
                 return _bytes(args[0]).encode(*args[1:])
             return _bytes(*args)
 
+if sys.version_info[0] == 3:
+    from multiprocessing.util import ForkAwareThreadLock
+else:
+    from multiprocessing.util import ForkAwareThreadLock as ForkAwareThreadLockBase
+
+    class ForkAwareThreadLock(ForkAwareThreadLockBase):
+
+        def __enter__(self):
+            return self._lock.__enter__()
+
+        def __exit__(self, *args):
+            return self._lock.__exit__(*args)
+
 
 def maybe_fileno(f):
     """Get object fileno, or :const:`None` if not defined."""

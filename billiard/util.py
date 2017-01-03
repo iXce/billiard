@@ -48,7 +48,6 @@ from multiprocessing.util import (  # noqa
     _finalizer_counter,
     Finalize,
     ForkAwareLocal,
-    ForkAwareThreadLock,
     get_temp_dir,
     is_exiting,
     register_after_fork,
@@ -56,7 +55,7 @@ from multiprocessing.util import (  # noqa
     _run_finalizers,
 )
 
-from .compat import get_errno
+from .compat import get_errno, ForkAwareThreadLock
 
 __all__ = [
     'sub_debug', 'debug', 'info', 'sub_warning', 'get_logger',
